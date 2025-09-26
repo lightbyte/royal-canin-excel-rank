@@ -9,107 +9,95 @@ use Google_Service_Sheets;
 
 class GoogleSheetsService
 {
-    protected $spreadsheetId;
-    protected $range;
-    protected $credentialsPath;
-    protected $client;
-    protected $service;
+    private $client;
+    private $service;
+    private $spreadsheetId;
+    private $range;
     
     public function __construct()
     {
         $this->spreadsheetId = env('GOOGLE_SHEETS_SPREADSHEET_ID');
-        $this->range = env('GOOGLE_SHEETS_RANGE', 'Sheet1!A:C');
-        $this->credentialsPath = storage_path('app/private/' . basename(env('GOOGLE_SHEETS_CREDENTIALS_PATH')));
-        
-        $this->initializeGoogleClient();
+        $this->range = env('GOOGLE_SHEETS_RANGE', 'Hoja 1!A:C');
+        $this->initializeClient();
     }
     
     /**
-     * Inicializar el cliente de Google
+     * Inicializar cliente de Google Sheets
      */
-    private function initializeGoogleClient()
+    private function initializeClient()
     {
         try {
+            $credentialsPath = storage_path('app/private/' . basename(env('GOOGLE_SHEETS_CREDENTIALS_PATH')));
+            
             $this->client = new Google_Client();
             $this->client->setApplicationName('Royal Canin Ranking System');
             $this->client->setScopes([Google_Service_Sheets::SPREADSHEETS_READONLY]);
-            $this->client->setAuthConfig($this->credentialsPath);
+            $this->client->setAuthConfig($credentialsPath);
             $this->client->setAccessType('offline');
             
             $this->service = new Google_Service_Sheets($this->client);
             
         } catch (Exception $e) {
-            Log::error('Error inicializando cliente de Google: ' . $e->getMessage());
-            // No lanzamos excepción aquí para permitir fallback a datos simulados
+            Log::error('Error inicializando Google Sheets: ' . $e->getMessage());
+            $this->service = null;
         }
     }
     
     /**
-     * Obtener datos del Google Spreadsheet
-     * 
-     * @return array
-     * @throws Exception
+     * Obtener datos del spreadsheet
      */
     public function obtenerDatos()
     {
+        if (!$this->service) {
+            Log::error('Google Sheets no está disponible, usando datos simulados');
+            return $this->obtenerDatosSimulados();
+        }
+        
         try {
-            // Validar configuración antes de hacer la llamada
-            $this->validarConfiguracion();
+            Log::info("Obteniendo datos de Google Sheets: {$this->spreadsheetId}, rango: {$this->range}");
             
-            Log::info('Obteniendo datos de Google Sheets - Spreadsheet ID: ' . $this->spreadsheetId);
+            $response = $this->service->spreadsheets_values->get($this->spreadsheetId, $this->range);
+            $values = $response->getValues();
             
-            // Hacer la llamada real a Google Sheets API
-            if ($this->service) {
-                $response = $this->service->spreadsheets_values->get($this->spreadsheetId, $this->range);
-                $values = $response->getValues();
-                
-                if (empty($values)) {
-                    Log::warning('No se encontraron datos en el spreadsheet');
-                    return [];
-                }
-                
-                // Procesar los datos obtenidos
-                $datosProcesados = $this->procesarDatosRaw($values);
-                
-                Log::info('Datos obtenidos exitosamente de Google Sheets. Total de registros: ' . count($datosProcesados));
-                
-                return $datosProcesados;
-            } else {
-                throw new Exception('Cliente de Google Sheets no inicializado');
+            if (empty($values)) {
+                Log::warning('No se encontraron datos en el spreadsheet');
+                return [];
             }
             
-        } catch (Exception $e) {
-            Log::error('Error al obtener datos de Google Sheets: ' . $e->getMessage());
+            $datosProcesados = $this->procesarDatos($values);
             
-            // En caso de error, usar datos simulados como fallback
-            Log::info('Usando datos simulados como fallback');
+            Log::info('Datos procesados exitosamente: ' . count($datosProcesados) . ' registros');
+            
+            return $datosProcesados;
+            
+        } catch (Exception $e) {
+            Log::error('Error obteniendo datos de Google Sheets: ' . $e->getMessage());
             return $this->obtenerDatosSimulados();
         }
     }
     
     /**
-     * Procesar datos raw del spreadsheet
+     * Procesar datos del spreadsheet
      */
-    private function procesarDatosRaw($values)
+    private function procesarDatos($values)
     {
-        $datosProcesados = [];
+        $datos = [];
         
-        // Saltar la primera fila si contiene headers
+        // Saltar primera fila si parece ser header
         $filas = $values;
         if (!empty($filas[0]) && !is_numeric($filas[0][2] ?? '')) {
-            array_shift($filas); // Remover header
+            array_shift($filas);
         }
         
-        foreach ($filas as $fila) {
-            // Validar que la fila tenga los datos necesarios
-            if (count($fila) >= 3 && !empty($fila[0]) && !empty($fila[1])) {
+        foreach ($filas as $index => $fila) {
+            // Validar que tenga al menos 3 columnas y datos básicos
+            if (count($fila) >= 3 && !empty(trim($fila[0] ?? '')) && !empty(trim($fila[1] ?? ''))) {
                 $codigo = strtoupper(trim($fila[0]));
-                $email = strtolower(trim($fila[1]));
+                $email = trim($fila[1]);
                 $recomendaciones = (int) ($fila[2] ?? 0);
                 
-                // Validar formato de email básico
-                if (filter_var($email, FILTER_VALIDATE_EMAIL) && $recomendaciones >= 0) {
-                    $datosProcesados[] = [
+                if ($recomendaciones >= 0) {
+                    $datos[] = [
                         'codigo' => $codigo,
                         'email' => $email,
                         'recomendaciones' => $recomendaciones
@@ -118,97 +106,39 @@ class GoogleSheetsService
             }
         }
         
-        return $datosProcesados;
+        return $datos;
     }
     
     /**
-     * Datos simulados para desarrollo y fallback
+     * Datos simulados para testing/fallback
      */
     private function obtenerDatosSimulados()
     {
         return [
-            ['codigo' => 'CLI001', 'email' => 'clinica001@test.com', 'recomendaciones' => 155],
-            ['codigo' => 'CLI002', 'email' => 'clinica002@test.com', 'recomendaciones' => 148],
-            ['codigo' => 'CLI003', 'email' => 'clinica003@test.com', 'recomendaciones' => 142],
-            ['codigo' => 'CLI004', 'email' => 'clinica004@test.com', 'recomendaciones' => 138],
-            ['codigo' => 'CLI005', 'email' => 'clinica005@test.com', 'recomendaciones' => 133],
-            ['codigo' => 'CLI006', 'email' => 'clinica006@test.com', 'recomendaciones' => 128],
-            ['codigo' => 'CLI007', 'email' => 'clinica007@test.com', 'recomendaciones' => 122],
-            ['codigo' => 'CLI008', 'email' => 'clinica008@test.com', 'recomendaciones' => 118],
-            ['codigo' => 'CLI009', 'email' => 'clinica009@test.com', 'recomendaciones' => 112],
-            ['codigo' => 'CLI010', 'email' => 'clinica010@test.com', 'recomendaciones' => 108],
-            ['codigo' => 'CLI011', 'email' => 'clinica011@test.com', 'recomendaciones' => 95], // Nueva clínica
+            ['codigo' => 'CLI001', 'email' => 'test1@example.com', 'recomendaciones' => 15],
+            ['codigo' => 'CLI002', 'email' => 'test2@example.com', 'recomendaciones' => 12],
+            ['codigo' => 'CLI003', 'email' => 'test3@example.com', 'recomendaciones' => 8],
         ];
     }
     
     /**
-     * Validar configuración de Google Sheets
-     */
-    public function validarConfiguracion()
-    {
-        if (empty($this->spreadsheetId)) {
-            throw new Exception('GOOGLE_SHEETS_SPREADSHEET_ID no está configurado correctamente');
-        }
-        
-        if (empty($this->credentialsPath) || !file_exists($this->credentialsPath)) {
-            throw new Exception('Archivo de credenciales de Google no encontrado en: ' . $this->credentialsPath);
-        }
-        
-        return true;
-    }
-    
-    /**
-     * Procesar datos del spreadsheet y convertirlos al formato esperado
-     */
-    public function procesarDatos($datosRaw)
-    {
-        $datosProcesados = [];
-        
-        foreach ($datosRaw as $fila) {
-            // Validar que la fila tenga los datos necesarios
-            if (count($fila) >= 3 && !empty($fila[0]) && !empty($fila[1])) {
-                $datosProcesados[] = [
-                    'codigo' => strtoupper(trim($fila[0])),
-                    'email' => strtolower(trim($fila[1])),
-                    'recomendaciones' => (int) ($fila[2] ?? 0)
-                ];
-            }
-        }
-        
-        return $datosProcesados;
-    }
-    
-    /**
-     * Probar la conexión con Google Sheets
+     * Probar conexión con Google Sheets
      */
     public function probarConexion()
     {
+        if (!$this->service) {
+            return ['success' => false, 'message' => 'Servicio no inicializado'];
+        }
+        
         try {
-            $this->validarConfiguracion();
-            
-            if (!$this->service) {
-                throw new Exception('Servicio de Google Sheets no inicializado');
-            }
-            
-            // Intentar obtener información básica del spreadsheet
             $response = $this->service->spreadsheets->get($this->spreadsheetId);
-            $title = $response->getProperties()->getTitle();
-            
-            Log::info('Conexión exitosa con Google Sheets. Título del documento: ' . $title);
-            
             return [
-                'success' => true,
-                'title' => $title,
-                'spreadsheet_id' => $this->spreadsheetId
+                'success' => true, 
+                'message' => 'Conexión exitosa',
+                'titulo' => $response->getProperties()->getTitle()
             ];
-            
         } catch (Exception $e) {
-            Log::error('Error al probar conexión con Google Sheets: ' . $e->getMessage());
-            
-            return [
-                'success' => false,
-                'error' => $e->getMessage()
-            ];
+            return ['success' => false, 'message' => $e->getMessage()];
         }
     }
 }

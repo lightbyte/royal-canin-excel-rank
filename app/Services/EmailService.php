@@ -28,9 +28,20 @@ class EmailService
             $tipoEmail = $this->determinarTipoEmail();
             
             $emailsEnviados = 0;
+            $emailsInvalidos = 0;
             $errores = [];
             
             foreach ($clinicas as $clinica) {
+                // Verificar si el email es válido
+                if (!filter_var($clinica->email, FILTER_VALIDATE_EMAIL)) {
+                    $emailsInvalidos++;
+                    Log::warning('Email inválido encontrado', [
+                        'codigo' => $clinica->codigo,
+                        'email' => $clinica->email
+                    ]);
+                    continue;
+                }
+                
                 try {
                     $this->enviarEmailIndividual($clinica, $tipoEmail);
                     $emailsEnviados++;
@@ -47,6 +58,7 @@ class EmailService
             
             Log::info('Envío de emails completado', [
                 'emails_enviados' => $emailsEnviados,
+                'emails_invalidos' => $emailsInvalidos,
                 'errores' => count($errores),
                 'tipo_email' => $tipoEmail
             ]);
@@ -54,6 +66,7 @@ class EmailService
             return [
                 'success' => true,
                 'emails_enviados' => $emailsEnviados,
+                'emails_invalidos' => $emailsInvalidos,
                 'errores' => count($errores),
                 'detalles_errores' => $errores
             ];
@@ -99,26 +112,35 @@ class EmailService
     {
         $datosEmail = $this->prepararDatosEmail($clinica, $tipoEmail);
         
-        // Por simplicidad, usamos log en lugar de envío real
-        // En producción, aquí se usaría Mail::send()
-        Log::info('Email enviado (simulado)', [
-            'destinatario' => $clinica->email,
-            'codigo' => $clinica->codigo,
-            'tipo' => $tipoEmail,
-            'asunto' => $datosEmail['asunto']
-        ]);
-        
-        // Descomentar para envío real:
-        /*
-        Mail::send(
-            'emails.ranking.' . $tipoEmail,
-            $datosEmail,
-            function ($message) use ($clinica, $datosEmail) {
-                $message->to($clinica->email)
-                        ->subject($datosEmail['asunto']);
-            }
-        );
-        */
+        try {
+            // Envío real de email
+            Mail::send(
+                'emails.ranking.' . $tipoEmail,
+                $datosEmail,
+                function ($message) use ($clinica, $datosEmail) {
+                    $message->to($clinica->email)
+                            ->subject($datosEmail['asunto'])
+                            ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+                }
+            );
+            
+            Log::info('Email enviado exitosamente', [
+                'destinatario' => $clinica->email,
+                'codigo' => $clinica->codigo,
+                'tipo' => $tipoEmail,
+                'asunto' => $datosEmail['asunto']
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error enviando email', [
+                'destinatario' => $clinica->email,
+                'codigo' => $clinica->codigo,
+                'tipo' => $tipoEmail,
+                'error' => $e->getMessage()
+            ]);
+            
+            throw $e; // Re-lanzar la excepción para manejo en nivel superior
+        }
     }
     
     /**
@@ -199,6 +221,134 @@ class EmailService
             ];
         }
     }
+
+    /**
+     * Enviar email de prueba con tipo específico
+     */
+    public function enviarEmailPruebaTipo($email, $codigo = 'CLI001', $tipo = 'weekly')
+    {
+        try {
+            // Buscar clínica o crear datos de prueba
+            $clinica = Ranking::buscarPorCodigo($codigo);
+            
+            if (!$clinica) {
+                // Crear datos de prueba con diferentes posiciones según el tipo
+                $datosSegunTipo = $this->obtenerDatosPruebaPorTipo($tipo);
+                
+                $clinica = (object) [
+                    'codigo' => $codigo,
+                    'email' => $email,
+                    'posicion_actual' => $datosSegunTipo['posicion'],
+                    'recomendaciones' => $datosSegunTipo['recomendaciones'],
+                    'variacion' => $datosSegunTipo['variacion'],
+                    'variacion_formateada' => $datosSegunTipo['variacion_formateada']
+                ];
+            }
+            
+            $this->enviarEmailIndividual($clinica, $tipo);
+            
+            return [
+                'success' => true,
+                'message' => "Email de prueba tipo '{$tipo}' enviado exitosamente"
+            ];
+            
+        } catch (\Exception $e) {
+            Log::error("Error enviando email de prueba tipo '{$tipo}': " . $e->getMessage());
+            
+            return [
+                'success' => false,
+                'message' => "Error enviando email de prueba tipo '{$tipo}': " . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Enviar todas las plantillas de email de prueba
+     */
+    public function enviarTodasLasPlantillasPrueba($email, $codigo = 'CLI001')
+    {
+        $tipos = ['first', 'weekly', 'final'];
+        $resultados = [];
+        $exitosos = 0;
+        $errores = 0;
+        
+        foreach ($tipos as $tipo) {
+            try {
+                $resultado = $this->enviarEmailPruebaTipo($email, $codigo, $tipo);
+                $resultados[] = [
+                    'tipo' => $tipo,
+                    'success' => $resultado['success'],
+                    'message' => $resultado['message']
+                ];
+                
+                if ($resultado['success']) {
+                    $exitosos++;
+                } else {
+                    $errores++;
+                }
+                
+                // Pequeña pausa entre envíos para evitar problemas con el servidor SMTP
+                sleep(1);
+                
+            } catch (\Exception $e) {
+                $resultados[] = [
+                    'tipo' => $tipo,
+                    'success' => false,
+                    'message' => "Error: " . $e->getMessage()
+                ];
+                $errores++;
+            }
+        }
+        
+        return [
+            'success' => $errores === 0,
+            'exitosos' => $exitosos,
+            'errores' => $errores,
+            'total' => count($tipos),
+            'detalles' => $resultados,
+            'message' => "Enviados {$exitosos} de " . count($tipos) . " emails de prueba"
+        ];
+    }
+
+    /**
+     * Obtener datos de prueba específicos por tipo de email
+     */
+    private function obtenerDatosPruebaPorTipo($tipo)
+    {
+        switch ($tipo) {
+            case 'first':
+                return [
+                    'posicion' => 5,
+                    'recomendaciones' => 120,
+                    'variacion' => 0,
+                    'variacion_formateada' => 'Nuevo'
+                ];
+            
+            case 'weekly':
+                return [
+                    'posicion' => 3,
+                    'recomendaciones' => 180,
+                    'variacion' => 2,
+                    'variacion_formateada' => '+2'
+                ];
+            
+            case 'final':
+                return [
+                    'posicion' => 1,
+                    'recomendaciones' => 250,
+                    'variacion' => 2,
+                    'variacion_formateada' => '+2'
+                ];
+            
+            default:
+                return [
+                    'posicion' => 1,
+                    'recomendaciones' => 150,
+                    'variacion' => 0,
+                    'variacion_formateada' => '='
+                ];
+        }
+    }
     
     /**
      * Verificar configuración de email
@@ -206,6 +356,7 @@ class EmailService
     public function verificarConfiguracion()
     {
         $errores = [];
+        $advertencias = [];
         
         if (empty(env('MAIL_FROM_ADDRESS'))) {
             $errores[] = 'MAIL_FROM_ADDRESS no está configurado';
@@ -215,13 +366,34 @@ class EmailService
             $errores[] = 'MAIL_FROM_NAME no está configurado';
         }
         
+        if (empty(env('MAIL_HOST'))) {
+            $errores[] = 'MAIL_HOST no está configurado';
+        }
+        
+        if (empty(env('MAIL_USERNAME'))) {
+            $errores[] = 'MAIL_USERNAME no está configurado';
+        }
+        
+        if (empty(env('MAIL_PASSWORD'))) {
+            $errores[] = 'MAIL_PASSWORD no está configurado';
+        }
+        
         if (env('MAIL_MAILER') === 'log') {
-            $errores[] = 'MAIL_MAILER está configurado como "log" - los emails no se enviarán realmente';
+            $advertencias[] = 'MAIL_MAILER está configurado como "log" - los emails no se enviarán realmente';
+        }
+        
+        if (env('MAIL_PORT') == 465 && empty(env('MAIL_ENCRYPTION'))) {
+            $errores[] = 'Puerto 465 requiere MAIL_ENCRYPTION=ssl';
+        }
+        
+        if (env('MAIL_PORT') == 587 && env('MAIL_ENCRYPTION') !== 'tls') {
+            $advertencias[] = 'Puerto 587 generalmente requiere MAIL_ENCRYPTION=tls';
         }
         
         return [
             'valida' => empty($errores),
-            'errores' => $errores
+            'errores' => $errores,
+            'advertencias' => $advertencias ?? []
         ];
     }
     

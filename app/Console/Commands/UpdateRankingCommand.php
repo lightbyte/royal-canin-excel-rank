@@ -5,26 +5,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Services\RankingService;
 use App\Services\GoogleSheetsService;
-use Illuminate\Support\Facades\Log;
 
 class UpdateRankingCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'ranking:update {--force : Forzar actualización independientemente del día}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Actualizar el ranking de clínicas desde Google Sheets';
 
-    protected $rankingService;
-    protected $googleSheetsService;
+    private $rankingService;
+    private $googleSheetsService;
 
     public function __construct(RankingService $rankingService, GoogleSheetsService $googleSheetsService)
     {
@@ -33,123 +21,58 @@ class UpdateRankingCommand extends Command
         $this->googleSheetsService = $googleSheetsService;
     }
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $this->info('🚀 Iniciando actualización del ranking...');
         
         try {
-            // Verificar si es el día correcto (a menos que se fuerce)
-            if (!$this->option('force') && !$this->rankingService->esDiaDeActualizacion()) {
-                $diaConfiguracion = env('RANKING_UPDATE_DAY', 'wednesday');
-                $this->warn("⚠️  Hoy no es día de actualización. El día configurado es: {$diaConfiguracion}");
-                $this->info('💡 Usa --force para forzar la actualización');
+            // Verificar día de actualización (a menos que se fuerce)
+            if (!$this->option('force') && !$this->esDiaDeActualizacion()) {
+                $this->warn('⚠️  Hoy no es día de actualización. Usa --force para forzar.');
                 return Command::FAILURE;
             }
             
-            // Verificar configuración de Google Sheets
-            $this->info('🔍 Verificando configuración de Google Sheets...');
-            try {
-                $this->googleSheetsService->validarConfiguracion();
-                $this->info('✅ Configuración de Google Sheets válida');
-            } catch (\Exception $e) {
-                $this->error('❌ Error en configuración de Google Sheets: ' . $e->getMessage());
+            // Probar conexión con Google Sheets
+            $this->info('🔗 Verificando conexión con Google Sheets...');
+            $conexion = $this->googleSheetsService->probarConexion();
+            
+            if (!$conexion['success']) {
+                $this->error('❌ Error de conexión: ' . $conexion['message']);
                 return Command::FAILURE;
             }
             
-            // Mostrar información previa
-            $this->mostrarInformacionPrevia();
+            $this->info('✅ Conexión exitosa: ' . $conexion['titulo']);
             
             // Confirmar actualización
             if (!$this->option('force') && !$this->confirm('¿Continuar con la actualización del ranking?')) {
-                $this->info('❌ Actualización cancelada por el usuario');
+                $this->info('❌ Actualización cancelada');
                 return Command::SUCCESS;
             }
             
-            // Realizar actualización
-            $this->info('📊 Obteniendo datos de Google Sheets...');
+            // Actualizar ranking
+            $this->info('📊 Actualizando ranking...');
             $resultado = $this->rankingService->actualizarRanking();
             
-            if ($resultado['success']) {
-                $this->info('✅ Ranking actualizado exitosamente!');
-                $this->info("📈 Total de clínicas procesadas: {$resultado['total_clinicas']}");
-                
-                // Mostrar estadísticas
-                $this->mostrarEstadisticas();
-                
-                // Limpiar rankings antiguos
-                $this->info('🧹 Limpiando rankings antiguos...');
-                $eliminados = $this->rankingService->limpiarRankingsAntiguos();
-                $this->info("🗑️  Registros antiguos eliminados: {$eliminados}");
-                
-                Log::info('Comando ranking:update ejecutado exitosamente', [
-                    'total_clinicas' => $resultado['total_clinicas'],
-                    'registros_eliminados' => $eliminados
-                ]);
-                
-                return Command::SUCCESS;
-            } else {
-                $this->error('❌ Error al actualizar ranking: ' . $resultado['message']);
-                return Command::FAILURE;
-            }
+            $this->info('✅ Ranking actualizado exitosamente');
+            $this->table(['Métrica', 'Valor'], [
+                ['Clínicas procesadas', $resultado['total_clinicas']],
+                ['Registros antiguos eliminados', $resultado['eliminados']],
+                ['Semana', now()->format('Y-W')]
+            ]);
+            
+            return Command::SUCCESS;
             
         } catch (\Exception $e) {
-            $this->error('❌ Error inesperado: ' . $e->getMessage());
-            Log::error('Error en comando ranking:update', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
+            $this->error('❌ Error: ' . $e->getMessage());
             return Command::FAILURE;
         }
     }
     
-    /**
-     * Mostrar información previa a la actualización
-     */
-    private function mostrarInformacionPrevia()
+    private function esDiaDeActualizacion()
     {
-        $this->info('📋 Información actual:');
+        $diaConfiguracion = env('RANKING_UPDATE_DAY', 'wednesday');
+        $diaActual = strtolower(now()->format('l'));
         
-        try {
-            $estadisticas = $this->rankingService->obtenerEstadisticas();
-            $this->table(
-                ['Métrica', 'Valor'],
-                [
-                    ['Total clínicas actuales', $estadisticas['total_clinicas']],
-                    ['Nuevas clínicas', $estadisticas['nuevas_clinicas']],
-                    ['Mejoraron posición', $estadisticas['mejoraron_posicion']],
-                    ['Empeoraron posición', $estadisticas['empeoraron_posicion']],
-                    ['Semana actual', $estadisticas['semana']]
-                ]
-            );
-        } catch (\Exception $e) {
-            $this->warn('⚠️  No se pudieron obtener estadísticas previas: ' . $e->getMessage());
-        }
-    }
-    
-    /**
-     * Mostrar estadísticas después de la actualización
-     */
-    private function mostrarEstadisticas()
-    {
-        try {
-            $estadisticas = $this->rankingService->obtenerEstadisticas();
-            
-            $this->info('📊 Estadísticas actualizadas:');
-            $this->table(
-                ['Métrica', 'Valor'],
-                [
-                    ['Total clínicas', $estadisticas['total_clinicas']],
-                    ['Nuevas clínicas', $estadisticas['nuevas_clinicas']],
-                    ['Mejoraron posición', $estadisticas['mejoraron_posicion']],
-                    ['Empeoraron posición', $estadisticas['empeoraron_posicion']],
-                    ['Semana', $estadisticas['semana']]
-                ]
-            );
-        } catch (\Exception $e) {
-            $this->warn('⚠️  No se pudieron obtener estadísticas: ' . $e->getMessage());
-        }
+        return $diaActual === $diaConfiguracion;
     }
 }
