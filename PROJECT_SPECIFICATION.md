@@ -77,7 +77,6 @@
   - `posicion_actual`: Posición en el ranking actual
   - `posicion_anterior`: Posición en el ranking anterior
   - `variacion`: Diferencia de posiciones (+/-)
-  - `semana`: Identificador de la semana
   - `created_at`, `updated_at`: Timestamps
 
 ### Cálculo de Variaciones

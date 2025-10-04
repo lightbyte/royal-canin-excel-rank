@@ -2,51 +2,64 @@
 
 @section('title', 'Iniciar Sesión - Ranking de Clínicas')
 @section('page-title', 'Iniciar Sesión')
+@section('header_title', 'Registro')
 
 @section('content')
-<div class="max-w-md mx-auto">
-    <div class="bg-white rounded-lg shadow-md p-8">
-        <div class="mb-6 text-center">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">Acceso al Ranking</h2>
-            <p class="text-gray-600">
-                Introduce el código de tu clínica para acceder al ranking.
-            </p>
-        </div>
+<div class="trophy">
+
+    <div class="container max-w-[800px] mx-auto px-2 lg:px-16 py-8">
+        <h1 class="login-title mb-20">
+            Introduce tu código de cliente para acceder al ranking
+        </h1>
         
-        <form action="{{ route('login.post') }}" method="POST" class="space-y-6">
-            @csrf
-            
-            <div>
-                <label for="codigo" class="block text-sm font-medium text-gray-700 mb-2">
-                    Código de Clínica
-                </label>
-                <input type="text" 
-                       id="codigo" 
-                       name="codigo" 
-                       value="{{ old('codigo') }}"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('codigo') border-red-500 @enderror"
-                       placeholder="Ej: CLI001"
-                       required
-                       autocomplete="off">
+        <div class="contenido-form">
+            <form action="{{ route('login.post') }}" method="POST" class="space-y-6">
+                @csrf
                 
-                @error('codigo')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                <div>
+                    <div class="field-group bg-royal-red rounded-lg py-2 px-6 flex items-center">
+                        <img src="{{ asset('images/icon-pencil.svg') }}" alt="Logo" class="w-12 h-12 mr-2">
+                        <input type="text" 
+                            id="codigo" 
+                            name="codigo" 
+                            value="{{ old('codigo') }}"
+                            class="w-full px-3 py-2 no-border focus:outline-none focus:ring-0 bg-transparent text-white placeholder-white"
+                            placeholder="Código cliente"
+                            required
+                            autocomplete="off">
+                    </div>
+                    
+                    @error('codigo')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+
+                    <p class="text-sm text-gray-500 mt-2 text-right">
+                        * Puedes encontrar tu código de cliente en las facturas o consultar a tu agente comercial.
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" 
+                            class="w-auto bg-royal-red hover:bg-royal-dark text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-royal-dark focus:ring-offset-2">
+                        Acceder al Ranking
+                    </button>
+                </div>
+            </form>
+        </div>
             
-            <button type="submit" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                Acceder al Ranking
-            </button>
-        </form>
-        
-        <div class="mt-6 pt-6 border-t border-gray-200 text-center">
-            <p class="text-sm text-gray-500 mb-2">
-                ¿No tienes tu código de clínica?
-            </p>
-            <p class="text-xs text-gray-400">
-                Contacta con tu representante de Royal Canin para obtenerlo.
-            </p>
+    </div>
+    
+
+</div>
+
+
+<div class="mx-auto mt-30 px-4 sm:px-14">
+    <div class="footer-text mt-30 flex flex-col md:flex-row justify-start md:justify-between md:items-end">
+        <div class="mb-8"></div>
+        <div class="mb-8">
+            <a href="{{ route('privacy') }}" class="hover:text-royal-dark transition-colors hover:underline">
+                *Política de privacidad
+            </a>
         </div>
     </div>
 </div>

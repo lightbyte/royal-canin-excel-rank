@@ -14,7 +14,6 @@ class RankingSeeder extends Seeder
      */
     public function run(): void
     {
-        $semanaActual = now()->format('Y-W');
         
         // Datos de prueba para el ranking
         $clinicas = [
@@ -51,7 +50,6 @@ class RankingSeeder extends Seeder
                 'posicion_actual' => $posicionActual,
                 'posicion_anterior' => $clinica['posicion_anterior'],
                 'variacion' => $variacion,
-                'semana' => $semanaActual,
                 'activo' => true
             ]);
         }

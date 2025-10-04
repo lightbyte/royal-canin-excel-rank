@@ -154,7 +154,6 @@ Para automatización completa, agregar al crontab:
 - `posicion_actual`: Posición en el ranking actual
 - `posicion_anterior`: Posición en el ranking anterior
 - `variacion`: Diferencia de posiciones (+/-)
-- `semana`: Identificador de la semana
 - `activo`: Estado de la clínica
 
 ### Google Sheets Format

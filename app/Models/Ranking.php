@@ -14,7 +14,6 @@ class Ranking extends Model
         'posicion_actual',
         'posicion_anterior',
         'variacion',
-        'semana',
         'activo'
     ];
 
@@ -34,14 +33,6 @@ class Ranking extends Model
         return $query->where('activo', true);
     }
 
-    /**
-     * Scope para obtener rankings de la semana actual
-     */
-    public function scopeSemanaActual(Builder $query): Builder
-    {
-        $semanaActual = now()->format('Y-W');
-        return $query->where('semana', $semanaActual);
-    }
 
     /**
      * Scope para ordenar por posición
@@ -57,18 +48,16 @@ class Ranking extends Model
     public static function getRankingActual()
     {
         return self::activos()
-            ->semanaActual()
             ->ordenadoPorPosicion()
             ->get();
     }
 
     /**
-     * Buscar clínica por código en la semana actual
+     * Buscar clínica por código
      */
     public static function buscarPorCodigo($codigo)
     {
         return self::activos()
-            ->semanaActual()
             ->where('codigo', $codigo)
             ->first();
     }

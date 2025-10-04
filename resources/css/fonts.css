@@ -1,0 +1,163 @@
+@font-face {
+    font-family: 'D-DIN-PRO';
+    src: url('/fonts/D-DIN-PRO-400-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'D-DIN-PRO';
+    src: url('/fonts/D-DIN-PRO-500-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'D-DIN-PRO';
+    src: url('/fonts/D-DIN-PRO-600-SemiBold.otf') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'D-DIN-PRO';
+    src: url('/fonts/D-DIN-PRO-700-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'D-DIN-PRO';
+    src: url('/fonts/D-DIN-PRO-800-ExtraBold.otf') format('opentype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'D-DIN-PRO';
+    src: url('/fonts/D-DIN-PRO-900-Heavy.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'D-DINCondensed';
+    src: url('/fonts/D-DINCondensed-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DIN';
+    src: url('/fonts/DIN Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DIN Pro';
+    src: url('/fonts/DIN Pro.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DIN Pro';
+    src: url('/fonts/DIN Pro Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DIN Pro';
+    src: url('/fonts/DIN Pro Condensed Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: condensed;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINOT';
+    src: url('/fonts/DINOT-Black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINOT';
+    src: url('/fonts/DINOT-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINOT';
+    src: url('/fonts/DINOT-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINOT';
+    src: url('/fonts/DINOT-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINOT';
+    src: url('/fonts/DINOT-LightItalic.otf') format('opentype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINOT';
+    src: url('/fonts/DINOT-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINOT';
+    src: url('/fonts/DINOT-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINOT';
+    src: url('/fonts/DINOT-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINOT';
+    src: url('/fonts/DINOT-RegularItalic.otf') format('opentype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINPro';
+    src: url('/fonts/DINPro-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'DINPro';
+    src: url('/fonts/DINPro-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Dinot Font';
+    src: url('/fonts/Dinot Font.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Agrega aquí más @font-face según los archivos en /public/fonts/ */

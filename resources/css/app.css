@@ -1,11 +1,221 @@
 @import 'tailwindcss';
+@import './fonts.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+html {
+    scroll-behavior: smooth;
+}
+
+
+body{
+    color:#6D6A6A;
+    font-family: 'D-DIN-PRO', sans-serif;
+    background-color: #fff;
+    font-size: 25px;
+    line-height: 30px;
+}
+@media (min-width: 640px) {
+    body{
+        font-size: 32px;
+        line-height: 35px;
+    }
+}
+.bg-royal-blue{
+    background-color: #0A7B99;
+}
+.bg-royal-red{
+    background-color: #D50017;
+}
+.text-royal-red{
+    color: #D50017;
+}
+.text-royal-dark{
+    color: #474747;
+}
+.bg-royal-grey{
+    background-color: #ECE8E9;
+}
+h1, h2, h3{
+    font-family: 'D-DINCondensed', sans-serif;
+    color: #D50017;
+}
+.notification{
+    display: inline-block;
+    background-color: #ECE8E9;
+    padding: 1rem;
+    border-left: 5px solid #D50017a8;
+}
+.btn-back{
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+}
+.btn-back i{
+    font-size: 3.5rem;
+    line-height: 4rem;
+}
+
+.trophy{
+    background: url('/images/trophy.png') no-repeat left top;
+    min-height: 900px;
+    padding-left: 0px;
+    padding-top: 100%;
+    padding-right: 30px;
+    background-size: clamp(200px, 90%, 600px);
+}
+
+@media (min-width: 768px) {
+    .trophy{
+        background-position: left center;
+        min-height: 800px;
+        padding-left: clamp(200px, 45%, 600px);
+        padding-top: 0px;
+        padding-right: 50px;
+        background-size: clamp(200px, 45%, 600px);
+    }
+    .trophy.bg-sticky{
+        background-attachment: fixed;
+        background-position-y: bottom;
+    }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+    .trophy.page-form{
+        background: url('/images/trophy.png') no-repeat left top;
+        min-height: 900px;
+        padding-left: 0px;
+        padding-top: 70%;
+        padding-right: 30px;
+        background-size: clamp(200px, 90%, 600px);
+    }
+    .trophy.page-form.bg-sticky{
+        background-attachment: unset;
+        background-position-y: unset;
+    }
+}
+@media (min-width: 992px) {
+    .trophy.page-form{
+        background-position: left center;
+        min-height: 800px;
+        padding-left: clamp(200px, 45%, 600px);
+        padding-top: 0px;
+        padding-right: 50px;
+        background-size: clamp(200px, 45%, 600px);
+    }
+    .trophy.page-form.bg-sticky{
+        background-attachment: fixed;
+        background-position-y: bottom;
+    }
+}
+.trophy-parragraph{
+    line-height: 32px;
+}
+.logo{
+    width: clamp(150px, 14vw, 300px);
+}
+.header-line{
+    height: 10px;
+}
+h1{
+    font-size: 35px;
+    line-height: 40px;
+}
+h2{
+    font-size: 35px;
+    line-height: 40px;
+}
+@media (min-width: 640px) {
+    h1{
+        font-size: 72px;
+        line-height: 68px;
+    }
+    h2{
+        font-size: 72px;
+        line-height: 68px;
+    }
+}
+@media (min-width: 768px) {
+    .prizes{
+        margin-top: 200px;
+    }
+}
+.home-text-intro{
+    font-size: clamp(1rem, 1.5vw, 32px);
+    line-height: clamp(1.2rem, 1.9rem, 35px);
+}
+.btn-register{
+    padding: 16px 52px;
+    font-size: clamp(1.2rem, 2vw, 36px);
+    line-height: clamp(1.4rem, 1.8rem, 39px);
+}
+
+.footer-text{
+    font-size: clamp(1rem, 1.2vw, 20px);
+    line-height: clamp(1.2rem, 1.8vw, 28px);
+}
+
+.prize-icon{
+    flex-shrink: 0;
+    flex-grow: 0;
+    width: 90px;
+    max-height: 100px;
+    text-align: center;
+}
+.prize-icon img{
+    width: 100%;
+    height: 100%;
+    object-fit: none;
+}
+.prizes h3 {
+    font-size: clamp(2rem, 3vw, 46px);
+    line-height: clamp(2.4rem, 4vw, 53px);
+    width: 100%;
+    text-align: left;
+    font-weight: 500;
+}
+.prizes .prizes-description{
+    width: 100%;
+}
+
+.header-text{
+    font-size: clamp(1rem, 1.2vw, 20px);
+    line-height: clamp(1.2rem, 1.8vw, 28px);
+    text-transform: uppercase;
+    padding: 0px 20px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.login-title{
+    font-size: 50px;
+    line-height: 54px;
+}
+
+table thead tr th{
+    font-size: clamp(1rem, 1.2vw, 32px);
+    line-height: clamp(1.2rem, 1.8vw, 35px);
+}
+
+table tr#mi-clinica{
+    background-color: #ECE8E9;
+    animation: gentleRedPulse 2s ease-in-out infinite;
+}
+
+@keyframes gentleRedPulse {
+    0%, 100% {
+        background-color: #ECE8E9;
+    }
+    50% {
+        background-color: #d0aeb0;
+    }
+}
+
+
+.title-footer{
+    font-size: clamp(3rem, 5vw, 90px);
+    line-height: clamp(2.4rem, 4vw, 98px);
 }

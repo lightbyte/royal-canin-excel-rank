@@ -55,9 +55,7 @@ class UpdateRankingCommand extends Command
             
             $this->info('✅ Ranking actualizado exitosamente');
             $this->table(['Métrica', 'Valor'], [
-                ['Clínicas procesadas', $resultado['total_clinicas']],
-                ['Registros antiguos eliminados', $resultado['eliminados']],
-                ['Semana', now()->format('Y-W')]
+                ['Clínicas procesadas', $resultado['total_clinicas']]
             ]);
             
             return Command::SUCCESS;

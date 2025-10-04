@@ -46,14 +46,12 @@ class RankingService
             
             Log::info('Ranking actualizado exitosamente', [
                 'total_clinicas' => $totalGuardados,
-                'semana' => now()->format('Y-W'),
-                'eliminados' => $eliminados
+                'semana' => now()->format('Y-W')
             ]);
             
             return [
                 'success' => true,
-                'total_clinicas' => $totalGuardados,
-                'eliminados' => $eliminados
+                'total_clinicas' => $totalGuardados
             ];
             
         } catch (\Exception $e) {
@@ -63,7 +61,7 @@ class RankingService
     }
     
     /**
-     * Obtener ranking de la semana anterior
+     * Obtener ranking anterior
      */
     private function obtenerRankingAnterior()
     {
@@ -78,7 +76,6 @@ class RankingService
     private function crearRanking($datos, $rankingAnterior)
     {
         $ranking = [];
-        $semanaActual = now()->format('Y-W');
         
         foreach ($datos as $index => $clinica) {
             $posicionActual = $index + 1;
@@ -97,7 +94,6 @@ class RankingService
                 'posicion_actual' => $posicionActual,
                 'posicion_anterior' => $posicionAnterior,
                 'variacion' => $variacion,
-                'semana' => $semanaActual,
                 'created_at' => now(),
                 'updated_at' => now()
             ];
@@ -115,7 +111,7 @@ class RankingService
         
         try {
             // Eliminar ranking actual si existe
-            Ranking::all()->delete();
+            Ranking::truncate();
             
             // Insertar nuevo ranking
             Ranking::insert($ranking);

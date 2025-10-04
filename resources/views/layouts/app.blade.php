@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,35 +7,51 @@
     <title>@yield('title', 'Ranking de Clínicas')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col">
     <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center space-x-4">
-                    @if(!request()->routeIs('home'))
-                        <a href="{{ route('home') }}" class="text-gray-600 hover:text-gray-900 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                            </svg>
-                        </a>
-                    @endif
-                    <h1 class="text-xl font-semibold text-gray-900">
-                        @yield('page-title', 'Ranking de Clínicas')
-                    </h1>
-                </div>
-                
-                @if(session('clinic_code'))
-                    <div class="flex items-center space-x-4">
-                        <span class="text-sm text-gray-600">Clínica: {{ session('clinic_code') }}</span>
-                        <form action="{{ route('logout') }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" class="text-sm text-red-600 hover:text-red-800 transition-colors">
-                                Cerrar Sesión
-                            </button>
-                        </form>
+    <header class="py-6">
+        <div class="mx-auto px-2 sm:px-14">
+            <div class="text-center p-4 block sm:hidden">
+                <img src="{{ asset('images/logo-royal-canin.png') }}" alt="Royal Canin" class="mx-auto">
+            </div>
+            <div class="flex flex-row justify-between items-center gap-2 sm:gap-0">
+                @if (!(request()->routeIs('home') || request()->routeIs('pt.home')))
+                    @php
+                        $backUrl = "history.back()";
+                        if (request()->routeIs('thanks')){
+                            $backUrl = "window.location='" . route('home') . "'";
+                        }
+                        if (request()->routeIs('pt.thanks')){
+                            $backUrl = "window.location='" . route('pt.home') . "'";
+                        }
+                    @endphp
+
+
+                    <button onclick="{{ $backUrl }}"
+                        type="button" 
+                        class="btn-back bg-royal-red text-white text-center w-[70px] h-[70px] mr-4 rounded-full hover:bg-opacity-90">
+                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="header-text bg-royal-red text-white leading-none text-center py-2 px-4 mr-0 sm:mr-4 rounded-2xl">
+                        <span>@yield('header_title')</span>
                     </div>
+                @else
+                    <a href="#saber-mas" class="header-text bg-royal-red text-white leading-none text-center py-2 px-4 mr-0 sm:mr-4 rounded-2xl">
+                        <span>{!! __('public.header_btn_1') !!}</span>
+                    </a>
+                    <a href="{{ route('ranking') }}" class="header-text bg-royal-red text-white leading-none text-center py-2 px-4 mr-0 sm:mr-4 rounded-2xl">
+                        <span>{!! __('public.header_btn_2') !!}</span>
+                    </a>
+                    <a href="{{ route('login') }}" class="header-text bg-royal-red text-white leading-none text-center py-2 px-4 mr-0 sm:mr-4 rounded-2xl">
+                        <span>{!! __('public.header_btn_3') !!}</span>
+                    </a>
                 @endif
+                <div class="header-line bg-royal-red grow shrink hidden sm:block"></div>
+                <div class="text-center p-4 ml-4 hidden sm:block">
+                    <img src="{{ asset('images/logo-royal-canin.png') }}" alt="Royal Canin" class="logo mx-auto mt-[-20px] pb-[20px]">
+                </div>
             </div>
         </div>
     </header>
@@ -55,19 +71,10 @@
                 </div>
             @endif
             
-            @yield('content')
         </div>
+        
+        @yield('content')
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 py-4">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <a href="{{ route('privacy') }}" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-                    Política de Privacidad
-                </a>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>

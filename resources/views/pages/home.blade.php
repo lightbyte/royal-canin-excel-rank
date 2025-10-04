@@ -4,48 +4,98 @@
 @section('page-title', 'Ranking de Clínicas Royal Canin')
 
 @section('content')
-<div class="text-center">
-    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+<div class="container mx-auto px-4">
+    <div class="text-center">
+        <h1 class="font-bold text-royal-red mb-20">BIENVENIDOS AL RANKING DE LAS MEJORES CLÍNICAS EN ASESORAMIENTO NUTRICIONAL A TRAVÉS DE VET SERVICES</h1>
+        
+        <h2 class="font-bold text-royal-red mb-30">¡Tu clínica ya forma parte!</h2>
+
+        <div class="max-w-[1400px] mx-auto">
+            <p class="text-royal-dark mb-10 ">
+                Queremos felicitarte e incluirte en este ranking porque tu clínica está entre las mejores de España en el uso de la herramienta de asesoramiento nutricional Vet Services.
+            </p>
+            <p class="text-royal-dark mb-10">
+                Gracias a tu esfuerzo y dedicación, has marcado la diferencia en el cuidado y bienestar de tus pacientes, y tu participación es el reflejo de ese compromiso.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="trophy">
+
+    <div id="saber-mas" class="container mx-auto px-4 py-8 prizes">
+        <h2 class="mb-20">
+            ¡Tu clínica puede estar en lo más alto!
+        </h2>
+        
+        <div class="flex flex-col md:flex-row sm:justify-start mb-16">
+            <div class="flex flex-row items-start gap-12">
+                <div class="prize-icon">
+                    <img src="{{ asset('images/icon-podium.svg') }}" alt="Podio">
+                </div>
+                <div class="prize-text">
+                    <h3 class="text-royal-dark mb-6">
+                        ¿CÓMO GANAS PUNTOS?
+                    </h3>
+                    <div class="prizes-description">
+                        <p class="trophy-parragraph mb-6">
+                            Durante <b>octubre y noviembre</b>, cada vez que realices una recomendación a través de cualquiera de las herramientas de Vet Services (Ración Diaria, Smart Reco, Programa de Peso) ganarás un punto.
+                        </p>
+                        
+                        <p class="trophy-parragraph"><b>¡Cada reco cuenta!</b></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row sm:justify-start mb-6">
+            <div class="flex flex-row items-start gap-12">
+                <div class="prize-icon">
+                    <img src="{{ asset('images/icon-medall.svg') }}" alt="Medalla">
+                </div>
+                <div class="prize-text">
+                    <h3 class="text-royal-dark  mb-6">
+                        ¿QUÉ PUEDES CONSEGUIR?
+                    </h3>
+                    <div class="prizes-description">
+                        <p class="trophy-parragraph mb-6">
+                            Si realizas al menos <b>50 recomendaciones</b> a través de Vet Services entre Octubre y Noviembre recibirás una <b>tarjeta regalo de 100€</b>.
+                        </p>
+                        <p class="trophy-parragraph mb-6">
+                            Y si eres una de las <b>tres clínicas con más recomendaciones</b>, ¡te llevas otra <b>tarjeta adicional de 250€!</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col md:flex-row sm:justify-start mb-8 sm:pl-18">
+            <a href="{{ route('ranking') }}" class="bg-royal-red text-white px-4 sm:px-12 py-4 text-center rounded-full font-bold">
+                DESCUBRE TU POSICIÓN EN EL RANKING AQUÍ
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="mx-auto mt-30 px-4 sm:px-14">
+    <div class="">
+        <p class="mb-2 font-bold">
+            Condiciones para optar a premio:
+        </p>
+        <p class="mb-8">
+            1. Estar registrado en la plataforma. <br>
+            2. Haber compartido al menos una recomendación profesional durante el periodo de medición.
+        </p>
+    </div>
+
+    <div class="footer-text mt-30 flex flex-col md:flex-row justify-start md:justify-between md:items-end">
+        <div class="mb-8 max-w-[1000px]">
+            *Promoción disponible temporalmente. Consulta con tu agente comercial. Suma de recomendaciones de octubre y noviembre. Las tarjetas regalo se emitirán en diciembre 2025. Sólo para clínicas seleccionadas como participantes en la promoción.
+        </div>
         <div class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Bienvenido</h2>
-            <p class="text-gray-600 mb-6">
-                Consulta tu posición en el ranking de clínicas y mantente al día con tu progreso.
-            </p>
-        </div>
-        
-        <div class="space-y-4">
-            @if(session('clinic_code'))
-                <!-- Si ya está logueado, ir directo al ranking -->
-                <a href="{{ route('ranking') }}" 
-                   class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors inline-block">
-                    Ver Ranking
-                </a>
-                
-                <form action="{{ route('logout') }}" method="POST" class="w-full">
-                    @csrf
-                    <button type="submit" 
-                            class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
-                        Cambiar de Clínica
-                    </button>
-                </form>
-            @else
-                <!-- Si no está logueado, mostrar opciones -->
-                <a href="{{ route('login') }}" 
-                   class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors inline-block">
-                    Iniciar Sesión
-                </a>
-                
-                <a href="{{ route('ranking') }}" 
-                   class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-4 rounded-lg transition-colors inline-block">
-                    Ver Ranking
-                </a>
-            @endif
-        </div>
-        
-        <div class="mt-8 pt-6 border-t border-gray-200">
-            <p class="text-sm text-gray-500">
-                ¿Necesitas ayuda? Contacta con tu representante de Royal Canin.
-            </p>
+            <a href="{{ route('privacy') }}" class="hover:text-royal-dark transition-colors hover:underline">
+                *Política de privacidad
+            </a>
         </div>
     </div>
 </div>

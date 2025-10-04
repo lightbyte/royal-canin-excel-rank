@@ -2,122 +2,58 @@
 
 @section('title', 'Política de Privacidad - Ranking de Clínicas')
 @section('page-title', 'Política de Privacidad')
+@section('header_title', 'Política de Privacidad')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="bg-white rounded-lg shadow-sm p-8">
-        <div class="prose max-w-none">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Política de Privacidad</h2>
+
+
+<div class="trophy bg-sticky">
+
+    <div class="container mx-auto px-2 lg:px-16 py-8">
+        <h1 class="mb-20">
+            Política de Privacidad
+        </h1>
+        
+        <div class="contenido-privacidad">
+
+            <p class="mb-10">Al completar el formulario de inscripción para participar en el plan de incentivos Vet Services, estás proporcionando datos personales que serán tratados de forma confidencial y conforme a la legislación vigente en materia de protección de datos.</p>
             
-            <div class="space-y-6 text-gray-700">
-                <section>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">1. Información que Recopilamos</h3>
-                    <p class="mb-4">
-                        En el marco del sistema de ranking de clínicas de Royal Canin, recopilamos únicamente la información necesaria para el funcionamiento del sistema:
-                    </p>
-                    <ul class="list-disc list-inside space-y-2 ml-4">
-                        <li>Código de identificación de la clínica</li>
-                        <li>Dirección de correo electrónico de contacto</li>
-                        <li>Datos de recomendaciones y puntuación</li>
-                        <li>Información de navegación básica (cookies técnicas)</li>
-                    </ul>
-                </section>
-                
-                <section>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">2. Uso de la Información</h3>
-                    <p class="mb-4">
-                        La información recopilada se utiliza exclusivamente para:
-                    </p>
-                    <ul class="list-disc list-inside space-y-2 ml-4">
-                        <li>Mostrar el ranking de clínicas participantes</li>
-                        <li>Enviar notificaciones sobre actualizaciones del ranking</li>
-                        <li>Proporcionar acceso personalizado al sistema</li>
-                        <li>Mejorar la experiencia del usuario</li>
-                    </ul>
-                </section>
-                
-                <section>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">3. Protección de Datos</h3>
-                    <p class="mb-4">
-                        Nos comprometemos a proteger su información personal mediante:
-                    </p>
-                    <ul class="list-disc list-inside space-y-2 ml-4">
-                        <li>Medidas de seguridad técnicas y organizativas apropiadas</li>
-                        <li>Acceso restringido a la información solo al personal autorizado</li>
-                        <li>Encriptación de datos sensibles</li>
-                        <li>Copias de seguridad regulares y seguras</li>
-                    </ul>
-                </section>
-                
-                <section>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">4. Compartir Información</h3>
-                    <p>
-                        No compartimos, vendemos ni alquilamos su información personal a terceros. 
-                        La información del ranking es visible únicamente para las clínicas participantes 
-                        en el programa de Royal Canin.
-                    </p>
-                </section>
-                
-                <section>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">5. Retención de Datos</h3>
-                    <p>
-                        Conservamos su información personal durante el período necesario para cumplir 
-                        con los propósitos descritos en esta política, o según lo requiera la ley aplicable.
-                    </p>
-                </section>
-                
-                <section>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">6. Sus Derechos</h3>
-                    <p class="mb-4">
-                        Usted tiene derecho a:
-                    </p>
-                    <ul class="list-disc list-inside space-y-2 ml-4">
-                        <li>Acceder a su información personal</li>
-                        <li>Rectificar datos inexactos</li>
-                        <li>Solicitar la eliminación de sus datos</li>
-                        <li>Oponerse al procesamiento de sus datos</li>
-                        <li>Solicitar la portabilidad de sus datos</li>
-                    </ul>
-                </section>
-                
-                <section>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">7. Cookies</h3>
-                    <p>
-                        Utilizamos cookies técnicas estrictamente necesarias para el funcionamiento 
-                        del sistema de autenticación y navegación. Estas cookies no requieren 
-                        consentimiento específico.
-                    </p>
-                </section>
-                
-                <section>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">8. Contacto</h3>
-                    <p class="mb-4">
-                        Para cualquier consulta relacionada con esta política de privacidad o 
-                        para ejercer sus derechos, puede contactarnos:
-                    </p>
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <p><strong>Royal Canin España</strong></p>
-                        <p>Email: {{ env('MAIL_FROM_ADDRESS', 'info@agenciamarsway.com') }}</p>
-                        <p>Teléfono: [Número de contacto]</p>
-                    </div>
-                </section>
-                
-                <section>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">9. Cambios en esta Política</h3>
-                    <p>
-                        Nos reservamos el derecho de actualizar esta política de privacidad. 
-                        Los cambios significativos serán comunicados a través del sistema 
-                        o por correo electrónico.
-                    </p>
-                </section>
-                
-                <div class="mt-8 pt-6 border-t border-gray-200">
-                    <p class="text-sm text-gray-500">
-                        <strong>Última actualización:</strong> {{ date('d/m/Y') }}
-                    </p>
-                </div>
-            </div>
+            <p class="mb-2"><strong>Responsable del tratamiento:</strong></p>
+            
+            <p class="mb-10">Los datos facilitados serán gestionados por Marsway Comunicación, S.L., con domicilio en Calle Orense, 25, 3ºA Derecha, 28020 y CIF B87262606. Puedes contactar con nosotros a través del correo electrónico info@agenciamarsway.com</p>
+            
+            <p class="mb-2"><strong>Finalidad del tratamiento:</strong></p>
+            
+            <p class="mb-2">Los datos recogidos a través de este formulario se utilizarán exclusivamente para:</p>
+            <ul class="mb-10">
+                <li>Gestionar la inscripción de tu clínica en el plan de incentivos Vet Services.</li>
+                <li>Realizar un seguimiento del uso de la herramienta Vet Services.</li>
+                <li>Comunicarte información relacionada con la campaña, actualizaciones, resultados y premios.</li>
+                <li>Coordinar la entrega de incentivos en caso de cumplimiento de objetivos.</li>
+            </ul>
+            
+            <p class="mb-2"><strong>Comunicación de datos:</strong></p>
+            
+            <p class="mb-10">Con el único fin de poder hacer seguimiento del rendimiento dentro del programa y gestionar los incentivos, tus datos podrán ser compartidos con Royal Canin Iberia S.A.U., empresa colaboradora en esta iniciativa. No se cederán a terceros ajenos ni se utilizarán con fines comerciales distintos a los aquí descritos.</p>
+            
+            <p class="mb-2"><strong>Conservación de los datos:</strong></p>
+            
+            <p class="mb-10">Tus datos se conservarán durante la duración del programa y hasta doce meses después de su finalización, únicamente para la gestión administrativa, promocional y entrega de premios. Posteriormente, serán eliminados de forma segura.</p>
+            
+            <p class="mb-2"><strong>Legitimación:</strong></p>
+            
+            <p class="mb-10">La base legal para el tratamiento de tus datos es tu consentimiento, otorgado al enviar voluntariamente este formulario.</p>
+            
+            <p class="mb-2"><strong>Tus derechos:</strong></p>
+            
+            <p class="mb-2">Puedes ejercer en cualquier momento tus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad de tus datos. Para ello, solo tienes que enviar un correo a [email de contacto de Marsway] indicando en el asunto "Protección de Datos – Vet Services". También puedes retirar tu consentimiento en cualquier momento.</p>
+            
+            <p class="mb-10">Si consideras que tus derechos no han sido respetados, puedes presentar una reclamación ante la Agencia Española de Protección de Datos (www.aepd.es).</p>
+            
         </div>
+            
     </div>
+    
+
 </div>
 @endsection

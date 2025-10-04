@@ -8,13 +8,11 @@ use Carbon\Carbon;
 
 class ListRankingsCommand extends Command
 {
-    protected $signature = 'ranking:list {--all : Mostrar todos los registros incluyendo inactivos} {--week= : Mostrar ranking de una semana específica (formato: 2025-W01)} {--limit=10 : Número de registros a mostrar (0 = todos)}';
+    protected $signature = 'ranking:list {--limit=10 : Número de registros a mostrar (0 = todos)}';
     protected $description = 'Mostrar los registros de la tabla ranking';
 
     public function handle()
     {
-        $mostrarTodos = $this->option('all');
-        $semana = $this->option('week');
         $limite = (int) $this->option('limit');
         
         $this->info('📊 Registros de la tabla ranking');
@@ -22,19 +20,6 @@ class ListRankingsCommand extends Command
         
         // Construir query base para contar total
         $queryBase = Ranking::query();
-        
-        if (!$mostrarTodos) {
-            $queryBase->where('activo', true);
-        }
-        
-        if ($semana) {
-            $queryBase->where('semana', $semana);
-            $this->info("🗓️  Mostrando semana: {$semana}");
-        } else {
-            $semanaActual = now()->format('Y-W');
-            $queryBase->where('semana', $semanaActual);
-            $this->info("🗓️  Mostrando semana actual: {$semanaActual}");
-        }
         
         // Contar total de registros disponibles
         $totalDisponibles = $queryBase->count();
@@ -92,7 +77,7 @@ class ListRankingsCommand extends Command
     
     private function mostrarTabla($rankings)
     {
-        $headers = ['Pos.', 'Código', 'Email', 'Recomend.', 'Variación', 'Estado', 'Semana'];
+        $headers = ['Pos.', 'Código', 'Email', 'Recomend.', 'Variación', 'Estado'];
         $rows = [];
         
         foreach ($rankings as $ranking) {
@@ -105,8 +90,7 @@ class ListRankingsCommand extends Command
                 $ranking->email,
                 $ranking->recomendaciones,
                 $variacion,
-                $estado,
-                $ranking->semana
+                $estado
             ];
         }
         

@@ -19,12 +19,11 @@ return new class extends Migration
             $table->integer('posicion_actual')->nullable(); // Posición en el ranking actual
             $table->integer('posicion_anterior')->nullable(); // Posición en el ranking anterior
             $table->integer('variacion')->nullable(); // Diferencia de posiciones (+/-)
-            $table->string('semana'); // Identificador de la semana
             $table->boolean('activo')->default(true); // Para marcar clínicas inactivas
             $table->timestamps();
             
             // Índices para optimizar consultas
-            $table->index(['semana', 'activo']);
+            $table->index(['activo']);
             $table->index('posicion_actual');
         });
     }
