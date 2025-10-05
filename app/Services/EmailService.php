@@ -163,23 +163,21 @@ class EmailService
                 return array_merge($datosBase, [
                     'asunto' => '¡Bienvenido al Ranking Royal Canin!',
                     'titulo' => 'Bienvenido al Sistema de Ranking',
-                    'mensaje_principal' => 'Te damos la bienvenida al sistema de ranking de clínicas Royal Canin.'
+                    'btn_link' => route('home'),
                 ]);
                 
             case 'final':
                 return array_merge($datosBase, [
                     'asunto' => 'Ranking Final - Royal Canin',
                     'titulo' => 'Ranking Final del Período',
-                    'mensaje_principal' => 'Ha finalizado el período de ranking. Aquí tienes tu posición final.',
-                    'posicion_final' => $clinica->posicion_actual,
-                    'puntos_totales' => $clinica->recomendaciones
+                    'btn_link' => route('home'),
                 ]);
                 
             default: // weekly
                 return array_merge($datosBase, [
                     'asunto' => 'Actualización Semanal del Ranking - Royal Canin',
                     'titulo' => 'Actualización Semanal del Ranking',
-                    'mensaje_principal' => 'Tu ranking ha sido actualizado. Consulta tu nueva posición.'
+                    'btn_link' => route('home'),
                 ]);
         }
     }

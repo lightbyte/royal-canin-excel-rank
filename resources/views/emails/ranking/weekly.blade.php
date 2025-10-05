@@ -1,165 +1,426 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $asunto }}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .header {
-            background-color: #1e40af;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px 8px 0 0;
-        }
-        .content {
-            background-color: #f8fafc;
-            padding: 30px;
-            border-radius: 0 0 8px 8px;
-        }
-        .ranking-card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 4px solid #1e40af;
-        }
-        .position {
-            font-size: 2em;
-            font-weight: bold;
-            color: #1e40af;
-        }
-        .points {
-            font-size: 1.5em;
-            color: #059669;
-            font-weight: bold;
-        }
-        .variation {
-            font-size: 1.2em;
-            font-weight: bold;
-            padding: 8px 16px;
-            border-radius: 20px;
-            display: inline-block;
-            margin: 10px 0;
-        }
-        .variation.positive {
-            background-color: #dcfce7;
-            color: #166534;
-        }
-        .variation.negative {
-            background-color: #fef2f2;
-            color: #dc2626;
-        }
-        .variation.neutral {
-            background-color: #f3f4f6;
-            color: #374151;
-        }
-        .variation.new {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
-            color: #6b7280;
-            font-size: 0.9em;
-        }
-        .btn {
-            display: inline-block;
-            background-color: #1e40af;
-            color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 6px;
-            margin: 20px 0;
-        }
-    </style>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"><!--[if mso]>
+<xml><w:WordDocument xmlns:w="urn:schemas-microsoft-com:office:word"><w:DontUseAdvancedTypographyReadingMail/></w:WordDocument>
+<o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml>
+<![endif]--><!--[if !mso]><!-->
+	<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@100;200;300;400;500;600;700;800;900" rel="stylesheet" type="text/css"><!--<![endif]-->
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		a[x-apple-data-detectors] {
+			color: inherit !important;
+			text-decoration: inherit !important;
+		}
+
+		#MessageViewBody a {
+			color: inherit;
+			text-decoration: none;
+		}
+
+		p {
+			line-height: inherit
+		}
+
+		.desktop_hide,
+		.desktop_hide table {
+			mso-hide: all;
+			display: none;
+			max-height: 0px;
+			overflow: hidden;
+		}
+
+		.image_block img+div {
+			display: none;
+		}
+
+		sup,
+		sub {
+			font-size: 75%;
+			line-height: 0;
+		}
+
+		@media (max-width:620px) {
+			.desktop_hide table.icons-inner {
+				display: inline-block !important;
+			}
+
+			.icons-inner {
+				text-align: center;
+			}
+
+			.icons-inner td {
+				margin: 0 auto;
+			}
+
+			.mobile_hide {
+				display: none;
+			}
+
+			.row-content {
+				width: 100% !important;
+			}
+
+			.stack .column {
+				width: 100%;
+				display: block;
+			}
+
+			.mobile_hide {
+				min-height: 0;
+				max-height: 0;
+				max-width: 0;
+				overflow: hidden;
+				font-size: 0px;
+			}
+
+			.desktop_hide,
+			.desktop_hide table {
+				display: table !important;
+				max-height: none !important;
+			}
+		}
+	</style><!--[if mso ]><style>sup, sub { font-size: 100% !important; } sup { mso-text-raise:10% } sub { mso-text-raise:-10% }</style> <![endif]-->
 </head>
-<body>
-    <div class="header">
-        <h1>{{ $titulo }}</h1>
-        <p>Royal Canin - Semana {{ $semana }}</p>
-    </div>
-    
-    <div class="content">
-        <h2>¡Hola, Clínica {{ $codigo }}!</h2>
-        
-        <p>{{ $mensaje_principal }}</p>
-        
-        <div class="ranking-card">
-            <h3>Tu Posición Actual</h3>
-            <div class="position">Posición #{{ $posicion }}</div>
-            <div class="points">{{ number_format($puntos) }} puntos</div>
-            
-            @if($variacion !== null)
-                @if($variacion > 0)
-                    <div class="variation positive">
-                        ↗️ Subiste {{ $variacion }} {{ $variacion == 1 ? 'posición' : 'posiciones' }}!
-                    </div>
-                @elseif($variacion < 0)
-                    <div class="variation negative">
-                        ↘️ Bajaste {{ abs($variacion) }} {{ abs($variacion) == 1 ? 'posición' : 'posiciones' }}
-                    </div>
-                @else
-                    <div class="variation neutral">
-                        ➡️ Mantuviste tu posición
-                    </div>
-                @endif
-            @else
-                <div class="variation new">
-                    🆕 ¡Nueva en el ranking!
-                </div>
-            @endif
-            
-            <p><strong>Fecha de actualización:</strong> {{ $fecha }}</p>
-        </div>
-        
-        @if($variacion !== null && $variacion > 0)
-            <div style="background-color: #dcfce7; padding: 15px; border-radius: 6px; margin: 20px 0;">
-                <p><strong>🎉 ¡Felicitaciones!</strong> Has mejorado tu posición en el ranking. ¡Sigue así!</p>
-            </div>
-        @elseif($variacion !== null && $variacion < 0)
-            <div style="background-color: #fef2f2; padding: 15px; border-radius: 6px; margin: 20px 0;">
-                <p><strong>💪 ¡No te desanimes!</strong> Cada semana es una nueva oportunidad para mejorar. Contacta con tu representante para estrategias de mejora.</p>
-            </div>
-        @elseif($variacion === null)
-            <div style="background-color: #dbeafe; padding: 15px; border-radius: 6px; margin: 20px 0;">
-                <p><strong>🌟 ¡Bienvenida al ranking!</strong> Esta es tu primera aparición. ¡Esperamos verte crecer semana a semana!</p>
-            </div>
-        @endif
-        
-        <h3>Próximos pasos:</h3>
-        <ul>
-            <li>Consulta el ranking completo para ver tu competencia</li>
-            <li>Revisa las estrategias con tu representante de Royal Canin</li>
-            <li>Mantén el enfoque en las recomendaciones de calidad</li>
-            <li>La próxima actualización será el próximo miércoles</li>
-        </ul>
-        
-        <div style="text-align: center;">
-            <a href="{{ env('APP_URL') }}/login" class="btn">Ver Ranking Completo</a>
-        </div>
-        
-        <div style="background-color: #f3f4f6; padding: 15px; border-radius: 6px; margin: 20px 0;">
-            <p><strong>🔑 Tu código de acceso:</strong> {{ $codigo }}</p>
-            <p><small>Usa este código para acceder al sistema y consultar el ranking completo.</small></p>
-        </div>
-    </div>
-    
-    <div class="footer">
-        <p><strong>Royal Canin España</strong></p>
-        <p>Este email ha sido enviado automáticamente. Si tienes alguna consulta, contacta con tu representante de Royal Canin.</p>
-        <p><small>Fecha de envío: {{ $fecha }} | Semana: {{ $semana }}</small></p>
-    </div>
+
+<body class="body" style="margin: 0; background-color: #f0f0f0; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none;">
+	<table class="nl-container" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f0f0f0;">
+		<tbody>
+			<tr>
+				<td>
+					<table class="row row-1" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f0f0f0; color: #000000; width: 600px; margin: 0 auto;" width="600">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
+													<div class="spacer_block block-1" style="height:10px;line-height:10px;font-size:1px;">&#8202;</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-2" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; border-radius: 0; color: #000000; padding: 15px; width: 600px; margin: 0 auto;" width="600">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: middle;">
+													<table class="image_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad" style="width:100%;">
+																<div class="alignment" align="center">
+																	<div style="max-width: 142.5px;"><img src="https://d8c10d5b30.imgdist.com/pub/bfra/mhzljrr0/4ji/x2s/nil/logo-royal-canin.png" style="display: block; height: auto; border: 0; width: 100%;" width="142.5" alt="Royal Canin" title="Royal Canin" height="auto"></div>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: middle;">
+													<table class="divider_block block-1" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad">
+																<div class="alignment" align="center">
+																	<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+																		<tr>
+																			<td class="divider_inner" style="font-size: 1px; line-height: 1px; border-top: 5px solid #d50017;"><span style="word-break: break-word;">&#8202;</span></td>
+																		</tr>
+																	</table>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: middle;">
+													<table class="image_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad" style="width:100%;">
+																<div class="alignment" align="center">
+																	<div style="max-width: 118px;"><img src="https://d8c10d5b30.imgdist.com/pub/bfra/mhzljrr0/thk/22o/9r4/logo-vet-services.png" style="display: block; height: auto; border: 0; width: 100%;" width="118" alt="Vet Services" title="Vet Services" height="auto"></div>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-3" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; border-radius: 0; color: #000000; width: 600px; margin: 0 auto;" width="600">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
+													<table class="heading_block block-1" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad" style="padding-left:50px;padding-right:50px;">
+																<h1 style="margin: 0; color: #d50017; direction: ltr; font-family: 'Oswald', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 29px; font-weight: 500; letter-spacing: normal; line-height: 1.2; text-align: center; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 35px;"><span class="tinyMce-placeholder" style="word-break: break-word;">¡EL RANKING DE VET SERVICES SE HA ACTUALIZADO!</span></h1>
+															</td>
+														</tr>
+													</table>
+													<div class="spacer_block block-2" style="height:30px;line-height:30px;font-size:1px;">&#8202;</div>
+													<table class="heading_block block-3" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad">
+																<h2 style="margin: 0; color: #d50017; direction: ltr; font-family: 'Oswald', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 25px; font-weight: 500; letter-spacing: normal; line-height: 1.2; text-align: center; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 30px;"><span class="tinyMce-placeholder" style="word-break: break-word;">DESCUBRE TU POSICIÓN</span></h2>
+															</td>
+														</tr>
+													</table>
+													<div class="spacer_block block-4" style="height:30px;line-height:30px;font-size:1px;">&#8202;</div>
+													<table class="paragraph_block block-5" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+														<tr>
+															<td class="pad" style="padding-bottom:15px;padding-left:50px;padding-right:50px;padding-top:15px;">
+																<div style="color:#464648;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:18px;font-weight:400;letter-spacing:0px;line-height:1.2;text-align:center;mso-line-height-alt:22px;">
+																	<p style="margin: 0;">Hola,</p>
+																</div>
+															</td>
+														</tr>
+													</table>
+													<table class="paragraph_block block-6" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+														<tr>
+															<td class="pad" style="padding-bottom:15px;padding-left:50px;padding-right:50px;padding-top:15px;">
+																<div style="color:#464648;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:18px;font-weight:400;letter-spacing:0px;line-height:1.2;text-align:center;mso-line-height-alt:22px;">
+																	<p style="margin: 0;">Queremos recordarte que el <b>ranking de las mejores clínicas en asesoramiento nutricional con Vet Services ya está actualizado</b>... ¡y tu clínica forma parte de él!</p>
+																</div>
+															</td>
+														</tr>
+													</table>
+                                                    <table class="paragraph_block block-6" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+														<tr>
+															<td class="pad" style="padding-bottom:15px;padding-left:50px;padding-right:50px;padding-top:15px;">
+																<div style="color:#464648;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:18px;font-weight:400;letter-spacing:0px;line-height:1.2;text-align:center;mso-line-height-alt:22px;">
+																	<p style="margin: 0;">Gracias a tu esfuerzo y dedicación, estás marcando la diferencia en el cuidado y bienestar de tus pacientes. Tu compromiso se refleja en cada recomendación que realizas con nuestras herramientas.</p>
+																</div>
+															</td>
+														</tr>
+													</table>
+													<div class="spacer_block block-7" style="height:60px;line-height:60px;font-size:1px;">&#8202;</div>
+													<table class="heading_block block-8" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad">
+																<h1 style="margin: 0; color: #d50017; direction: ltr; font-family: 'Oswald', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 29px; font-weight: 500; letter-spacing: normal; line-height: 1.2; text-align: center; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 35px;"><span class="tinyMce-placeholder" style="word-break: break-word;">¡TU CLÍNICA PUEDE ESTAR EN LO MÁS ALTO!</span></h1>
+															</td>
+														</tr>
+													</table>
+													<div class="spacer_block block-9" style="height:60px;line-height:60px;font-size:1px;">&#8202;</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-4" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; border-radius: 0; color: #000000; padding-left: 50px; padding-right: 50px; width: 600px; margin: 0 auto;" width="600">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="16.666666666666668%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
+													<table class="image_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad" style="width:100%;">
+																<div class="alignment" align="center">
+																	<div style="max-width: 83.333px;"><img src="https://d8c10d5b30.imgdist.com/pub/bfra/mhzljrr0/mq4/65e/i0k/icon-podium.svg" style="display: block; height: auto; border: 0; width: 100%;" width="83.333" alt title height="auto"></div>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td class="column gap" style="vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left;">
+													<table style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 15px; height: 15px;" width="15" height="15"></table>
+												</td>
+												<td class="column column-2" width="83.33333333333333%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
+													<table class="heading_block block-1" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad">
+																<h2 style="margin: 0; color: #474747; direction: ltr; font-family: 'Oswald', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 25px; font-weight: 700; letter-spacing: normal; line-height: 1.2; text-align: left; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 30px;"><span class="tinyMce-placeholder" style="word-break: break-word;">¿CÓMO GANAS PUNTOS?</span></h2>
+															</td>
+														</tr>
+													</table>
+													<table class="paragraph_block block-2" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+														<tr>
+															<td class="pad">
+																<div style="color:#464648;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:1.2;text-align:left;mso-line-height-alt:19px;">
+																	<p style="margin: 0; margin-bottom: 16px;">Durante <strong>octubre y noviembre</strong> cada vez que realices una recomendación a través de cualquiera de las herramientas de Vet Services (Ración Diaria, Smart Reco, Programa de Peso) ganarás un punto.</p>
+																	<p style="margin: 0;"><strong>¡Cada reco cuenta!</strong></p>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-5" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; border-radius: 0; color: #000000; width: 600px; margin: 0 auto;" width="600">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
+													<div class="spacer_block block-1" style="height:40px;line-height:40px;font-size:1px;">&#8202;</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-6" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; border-radius: 0; color: #000000; padding-left: 50px; padding-right: 50px; width: 600px; margin: 0 auto;" width="600">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="16.666666666666668%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
+													<table class="image_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad" style="width:100%;">
+																<div class="alignment" align="center">
+																	<div style="max-width: 58px;"><img src="https://d8c10d5b30.imgdist.com/pub/bfra/mhzljrr0/r4t/ct5/486/icon-medall.svg" style="display: block; height: auto; border: 0; width: 100%;" width="58" alt title height="auto"></div>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td class="column gap" style="vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left;">
+													<table style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 15px; height: 15px;" width="15" height="15"></table>
+												</td>
+												<td class="column column-2" width="83.33333333333333%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
+													<table class="heading_block block-1" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad">
+																<h2 style="margin: 0; color: #474747; direction: ltr; font-family: 'Oswald', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 25px; font-weight: 700; letter-spacing: normal; line-height: 1.2; text-align: left; margin-top: 0; margin-bottom: 0; mso-line-height-alt: 30px;"><span class="tinyMce-placeholder" style="word-break: break-word;">¿QUÉ PUEDES CONSEGUIR?</span></h2>
+															</td>
+														</tr>
+													</table>
+													<table class="paragraph_block block-2" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+														<tr>
+															<td class="pad">
+																<div style="color:#464648;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:1.2;text-align:left;mso-line-height-alt:19px;">
+																	<p style="margin: 0; margin-bottom: 16px;">Si realizas al menos <strong>50 recomendaciones</strong> a través de Vet Services entre octubre y noviembre, tu clínica recibirá una <strong>tarjeta regalo de 100€.</strong></p>
+																	<p style="margin: 0;">Y si eres una de las <strong>tres clínicas con más recomendaciones</strong>, ¡te llevas otra <strong>tarjeta adicional de 250€</strong>!</p>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-7" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-radius: 0; padding-bottom: 15px; background-color: #ffffff; color: #000000; padding-top: 15px; width: 600px; margin: 0 auto;" width="600">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
+													<table class="button_block block-1" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad">
+																<div class="alignment" align="center"><a href="{{ $btn_link }}" target="_blank" style="color:#ffffff;text-decoration:none;"><!--[if mso]>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"  href="{{ $btn_link }}"  style="height:52px;width:410px;v-text-anchor:middle;" arcsize="58%" fillcolor="#d50017">
+<v:stroke dashstyle="Solid" weight="0px" color="#d50017"/>
+<w:anchorlock/>
+<v:textbox inset="0px,0px,0px,0px">
+<center dir="false" style="color:#ffffff;font-family:Arial, sans-serif;font-size:21px">
+<![endif]--><span class="button" style="background-color: #d50017; mso-shading: transparent; border-bottom: 0px solid transparent; border-left: 0px solid transparent; border-radius: 30px; border-right: 0px solid transparent; border-top: 0px solid transparent; color: #ffffff; display: inline-block; font-family: 'Oswald', Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 21px; font-weight: 500; mso-border-alt: none; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; padding-right: 20px; text-align: center; width: auto; word-break: keep-all; letter-spacing: normal;"><span style="word-break: break-word; line-height: 42px;">DESCUBRE TU POSICIÓN EN EL RANKING AQUÍ</span></span><!--[if mso]></center></v:textbox></v:roundrect><![endif]--></a></div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-8" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-radius: 0; padding-bottom: 15px; background-color: #ffffff; color: #000000; padding-left: 30px; padding-right: 30px; width: 600px; margin: 0 auto;" width="600">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
+													<table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+														<tr>
+															<td class="pad">
+																<div style="color:#6D6A6A;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:10px;font-weight:400;letter-spacing:0px;line-height:1.2;text-align:left;mso-line-height-alt:12px;">
+																	<p style="margin: 0;">*Promoción disponible temporalmente. Consulta con tu agente comercial. Suma de recomendaciones de octubre y noviembre. Las tarjetas regalo se emitirán en diciembre 2025. Sólo para clínicas seleccionadas como participantes en la promoción.</p>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-9" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f0f0f0; color: #000000; width: 600px; margin: 0 auto;" width="600">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top;">
+													<div class="spacer_block block-1" style="height:10px;line-height:10px;font-size:1px;">&#8202;</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table><!-- End -->
 </body>
+
 </html>
