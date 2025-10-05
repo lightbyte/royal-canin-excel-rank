@@ -87,9 +87,9 @@ class EmailService
     private function determinarTipoEmail()
     {
         $fechaActual = now();
-        $fechaInicio = Carbon::parse(env('RANKING_START_DATE', '2025-01-03'));
-        $fechaFin = Carbon::parse(env('RANKING_END_DATE', '2025-12-12'));
-        $fechaPrimerEmail = Carbon::parse(env('RANKING_FIRST_EMAIL_DATE', '2025-01-03'));
+        $fechaInicio = Carbon::parse(env('RANKING_START_DATE', '2025-10-08'));
+        $fechaFin = Carbon::parse(env('RANKING_END_DATE', '2025-12-03'));
+        $fechaPrimerEmail = Carbon::parse(env('RANKING_FIRST_EMAIL_DATE', '2025-10-08'));
         
         // Email inicial (primer día)
         if ($fechaActual->isSameDay($fechaPrimerEmail)) {
