@@ -43,13 +43,22 @@ class Ranking extends Model
     }
 
     /**
-     * Obtener ranking actual ordenado
+     * Obtener ranking actual ordenado (con soporte para límite y desplazamiento)
      */
-    public static function getRankingActual()
+    public static function getRankingActual($limit = null, $offset = 0)
     {
-        return self::activos()
-            ->ordenadoPorPosicion()
-            ->get();
+        $query = self::activos()
+            ->ordenadoPorPosicion();
+
+        if ($offset > 0) {
+            $query->skip($offset);
+        }
+
+        if ($limit !== null) {
+            $query->take($limit);
+        }
+
+        return $query->get();
     }
 
     /**

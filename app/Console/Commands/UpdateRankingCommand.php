@@ -44,10 +44,10 @@ class UpdateRankingCommand extends Command
             $this->info('✅ Conexión exitosa: ' . $conexion['titulo']);
             
             // Confirmar actualización
-            if (!$this->option('force') && !$this->confirm('¿Continuar con la actualización del ranking?')) {
-                $this->info('❌ Actualización cancelada');
-                return Command::SUCCESS;
-            }
+            // if (!$this->option('force') && !$this->confirm('¿Continuar con la actualización del ranking?')) {
+            //     $this->info('❌ Actualización cancelada');
+            //     return Command::SUCCESS;
+            // }
             
             // Actualizar ranking
             $this->info('📊 Actualizando ranking...');

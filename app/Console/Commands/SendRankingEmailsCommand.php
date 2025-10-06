@@ -14,7 +14,7 @@ class SendRankingEmailsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'emails:send-ranking-update {--test=* : Enviar email de prueba a direcciones específicas} {--force : Forzar envío independientemente del día}';
+    protected $signature = 'emails:send-ranking-update {--test=* : Enviar email de prueba a direcciones específicas} {--force : Forzar envío independientemente del día} {--limit= : Limitar el número de emails a enviar} {--offset= : Número de registros a saltar antes de empezar}';
 
     /**
      * The console command description.
@@ -47,7 +47,7 @@ class SendRankingEmailsCommand extends Command
         
         try {
             // Verificar si es el día correcto (a menos que se fuerce)
-            if (!$this->option('force') && !$this->rankingService->esDiaDeActualizacion()) {
+            if (!$this->option('force') && !$this->esDiaDeActualizacion()) {
                 $diaConfiguracion = env('RANKING_UPDATE_DAY', 'wednesday');
                 $this->warn("⚠️  Hoy no es día de envío de emails. El día configurado es: {$diaConfiguracion}");
                 $this->info('💡 Usa --force para forzar el envío');
@@ -72,16 +72,28 @@ class SendRankingEmailsCommand extends Command
             
             // Mostrar estadísticas previas
             $this->mostrarEstadisticas();
-            
-            // Confirmar envío
-            if (!$this->option('force') && !$this->confirm('¿Continuar con el envío de emails?')) {
-                $this->info('❌ Envío cancelado por el usuario');
-                return Command::SUCCESS;
+
+            // Leer y normalizar parámetros de paginación
+            $limitOpt = $this->option('limit');
+            $offsetOpt = $this->option('offset');
+            $limit = $limitOpt !== null ? (int) $limitOpt : null;
+            // Si limit <= 0, lo tratamos como "sin límite"
+            $limit = ($limit !== null && $limit <= 0) ? null : $limit;
+            $offset = $offsetOpt !== null ? max(0, (int) $offsetOpt) : 0;
+
+            if ($limit !== null || $offset > 0) {
+                $this->info(sprintf('⚙️ Parámetros de envío: offset=%d%s', $offset, $limit !== null ? " limit={$limit}" : ' (sin límite)'));
             }
+
+            // // Confirmar envío
+            // if (!$this->option('force') && !$this->confirm('¿Continuar con el envío de emails?')) {
+            //     $this->info('❌ Envío cancelado por el usuario');
+            //     return Command::SUCCESS;
+            // }
             
             // Realizar envío
             $this->info('📤 Enviando emails...');
-            $resultado = $this->emailService->enviarEmailsActualizacion();
+            $resultado = $this->emailService->enviarEmailsActualizacion($limit, $offset);
             
             if ($resultado['success']) {
                 $this->info('✅ Emails enviados exitosamente!');
@@ -175,5 +187,13 @@ class SendRankingEmailsCommand extends Command
         } catch (\Exception $e) {
             $this->warn('⚠️  No se pudieron obtener estadísticas: ' . $e->getMessage());
         }
+    }
+
+    private function esDiaDeActualizacion()
+    {
+        $diaConfiguracion = env('RANKING_UPDATE_DAY', 'wednesday');
+        $diaActual = strtolower(now()->format('l'));
+        
+        return $diaActual === $diaConfiguracion;
     }
 }

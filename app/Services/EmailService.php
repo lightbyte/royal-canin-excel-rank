@@ -12,16 +12,19 @@ class EmailService
     /**
      * Enviar emails de actualización de ranking a todas las clínicas
      */
-    public function enviarEmailsActualizacion()
+    public function enviarEmailsActualizacion($limit = null, $offset = 0)
     {
         try {
-            Log::info('Iniciando envío de emails de actualización de ranking');
+            Log::info('Iniciando envío de emails de actualización de ranking', [
+                'limit' => $limit,
+                'offset' => $offset
+            ]);
             
-            // Obtener todas las clínicas del ranking actual
-            $clinicas = Ranking::getRankingActual();
+            // Obtener clínicas del ranking actual respetando limit/offset
+            $clinicas = Ranking::getRankingActual($limit, $offset);
             
             if ($clinicas->isEmpty()) {
-                throw new \Exception('No hay clínicas en el ranking actual');
+                throw new \Exception('No hay clínicas en el ranking actual con los parámetros especificados');
             }
             
             // Determinar tipo de email según la fecha
@@ -60,7 +63,9 @@ class EmailService
                 'emails_enviados' => $emailsEnviados,
                 'emails_invalidos' => $emailsInvalidos,
                 'errores' => count($errores),
-                'tipo_email' => $tipoEmail
+                'tipo_email' => $tipoEmail,
+                'limit' => $limit,
+                'offset' => $offset
             ]);
             
             return [

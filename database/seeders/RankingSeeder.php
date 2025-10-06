@@ -17,12 +17,12 @@ class RankingSeeder extends Seeder
         
         // Datos de prueba para el ranking
         $clinicas = [
-            ['codigo' => 'CLI001', 'email' => 'clinica001@test.com', 'recomendaciones' => 150, 'posicion_anterior' => 2],
-            ['codigo' => 'CLI002', 'email' => 'clinica002@test.com', 'recomendaciones' => 145, 'posicion_anterior' => 1],
-            ['codigo' => 'CLI003', 'email' => 'clinica003@test.com', 'recomendaciones' => 140, 'posicion_anterior' => 3],
-            ['codigo' => 'CLI004', 'email' => 'clinica004@test.com', 'recomendaciones' => 135, 'posicion_anterior' => 5],
+            ['codigo' => 'CLI001', 'email' => 'pedro@tuprogramadorpersonal.com', 'recomendaciones' => 150, 'posicion_anterior' => 2],
+            ['codigo' => 'CLI002', 'email' => 'pmartin79@gmail.com', 'recomendaciones' => 145, 'posicion_anterior' => 1],
+            ['codigo' => 'CLI003', 'email' => 'pmartin@nomadestudio.com', 'recomendaciones' => 140, 'posicion_anterior' => 3],
+            ['codigo' => 'CLI004', 'email' => 'p.martin@reload.com', 'recomendaciones' => 135, 'posicion_anterior' => 5],
             ['codigo' => 'CLI005', 'email' => 'clinica005@test.com', 'recomendaciones' => 130, 'posicion_anterior' => 4],
-            ['codigo' => 'CLI006', 'email' => 'clinica006@test.com', 'recomendaciones' => 125, 'posicion_anterior' => null], // Nueva clínica
+            ['codigo' => 'CLI006', 'email' => 'clinica006@test.com', 'recomendaciones' => 125, 'posicion_anterior' => 10],
             ['codigo' => 'CLI007', 'email' => 'clinica007@test.com', 'recomendaciones' => 120, 'posicion_anterior' => 6],
             ['codigo' => 'CLI008', 'email' => 'clinica008@test.com', 'recomendaciones' => 115, 'posicion_anterior' => 7],
             ['codigo' => 'CLI009', 'email' => 'clinica009@test.com', 'recomendaciones' => 110, 'posicion_anterior' => 8],
@@ -54,6 +54,5 @@ class RankingSeeder extends Seeder
             ]);
         }
         
-        $this->command->info('Se han creado ' . count($clinicas) . ' registros de ranking de prueba.');
     }
 }
