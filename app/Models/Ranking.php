@@ -51,11 +51,24 @@ class Ranking extends Model
             ->ordenadoPorPosicion();
 
         if ($offset > 0) {
-            $query->skip($offset);
+            // SQLite requiere LIMIT junto con OFFSET
+            if ($limit === null) {
+                $total = (clone $query)->count();
+
+                // Si el offset supera el total, devolver colección vacía
+                if ($offset >= $total) {
+                    return collect([]);
+                }
+
+                // Calcular límite para que OFFSET funcione en SQLite
+                $limit = $total - $offset;
+            }
+
+            $query->offset($offset);
         }
 
         if ($limit !== null) {
-            $query->take($limit);
+            $query->limit($limit);
         }
 
         return $query->get();
